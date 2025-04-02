@@ -42,16 +42,13 @@ app.post('/api/sensor-data', async (req, res) => {
 
   console.log('[INFO] Sensor Value Received:', sensorValue);
 
-  // ✅ Wrap in an async function
-  (async () => {
-    try {
-      await new SensorData({ sensorValue }).save();
-      res.json({ message: 'Data received and stored' });
-    } catch (error) {
-      console.error("❌ Error saving sensor data:", error);
-      res.status(500).json({ message: 'Server error' });
-    }
-  })();
+  try {
+    await new SensorData({ sensorValue }).save();
+    res.json({ message: 'Data received and stored' });
+  } catch (error) {
+    console.error("❌ Error saving sensor data:", error);
+    res.status(500).json({ message: 'Server error' });
+  }
 });
 
 // ✅ Get Latest Sensor Data
@@ -65,13 +62,5 @@ app.get('/api/sensor-data', async (req, res) => {
   }
 });
 
-// ✅ Handle HTTP Requests by Redirecting to HTTPS
-app.use((req, res, next) => {
-  if (req.headers['x-forwarded-proto'] !== 'https') {
-    return res.redirect('https://${req.headers.host}${req.url}');
-  }
-  next();
-});
-
 // ✅ Start Server
-app.listen(PORT, () => console.log( 'Server running on port ${PORT}'));
+app.listen(PORT, () => console.log('Server running on port ${PORT}'));
