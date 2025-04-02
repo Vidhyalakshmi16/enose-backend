@@ -68,10 +68,10 @@ app.get('/api/sensor-data', async (req, res) => {
 // ✅ Handle HTTP Requests by Redirecting to HTTPS
 app.use((req, res, next) => {
   if (req.headers['x-forwarded-proto'] !== 'https') {
-    return res.redirect(https://${req.headers.host}${req.url});
+    return res.redirect('https://${req.headers.host}${req.url}');
   }
   next();
 });
 
 // ✅ Start Server
-app.listen(PORT, () => console.log(🚀 Server running on port ${PORT}));
+app.listen(PORT, () => console.log( 'Server running on port ${PORT}'));
