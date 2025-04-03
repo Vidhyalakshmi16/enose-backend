@@ -45,5 +45,18 @@ app.get("/api/sensor-data", async (req, res) => {
     }
 });
 
+// ✅ Middleware to Redirect HTTP to HTTPS (But Allow HTTP for SIM800L)
+app.use((req, res, next) => {
+    if (req.headers["x-forwarded-proto"] !== "https" && req.method === "POST") {
+        console.log("Received HTTP request, allowing it...");
+        return next();  // Allow HTTP requests from SIM800L
+    }
+    if (req.headers["x-forwarded-proto"] !== "https") {
+        return res.redirect(`https://${req.headers.host}${req.url}`);
+    }
+    next();
+});
+
+
 // ✅ Start Server
 app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
